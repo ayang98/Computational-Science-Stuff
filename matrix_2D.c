@@ -14,7 +14,7 @@ char* strdup (const char * str_in){
 }
 
 
-Matrix matrix_constuctor(int n1, int n2, char *name){
+Matrix matrix_constructor(int n1, int n2, char *name){
 	Matrix null_matrix;
 	null_matrix.rows = 0;
 	null_matrix.columns = 0;
@@ -133,12 +133,12 @@ Matrix matrix_add(Matrix m1, Matrix m2, char *name){
 
 	else if(m1.rows != m2.rows || m1.columns != m2.columns){
 		printf("matrix_add error\n");
-		Matrix null_matrix = matrix_constuctor(0,0,name);
+		Matrix null_matrix = matrix_constructor(0,0,name);
 		return null_matrix;
 	}
 	else{
 
-		Matrix output = matrix_constuctor(m1.rows, m1.columns, name);
+		Matrix output = matrix_constructor(m1.rows, m1.columns, name);
 		output.status = 1;
 		for (int i = 0; i < m1.rows; i++){
 			for (int j = 0; j <  m1.columns; j++){
@@ -168,17 +168,20 @@ Matrix matrix_product(Matrix m1, Matrix m2, char *name){
 	else if(m1.columns != m2.rows){
 
 		printf("matrix_product error\n");
-		Matrix null_matrix = matrix_constuctor(0,0,name);
+		Matrix null_matrix = matrix_constructor(0,0,name);
 		return null_matrix;
 	}
 	else{
-		Matrix output = matrix_constuctor(m1.rows, m2.columns, name);
+		double new;
+		Matrix output = matrix_constructor(m1.rows, m2.columns, name);
 		for (int i=0; i< m1.rows; i++){
 			for (int j=0; j<m2.columns; j++){
+				new = 0;
 				for (int k = 0; k < m1.columns; k++){
 
-					matrix_set(&output, i , j, matrix_get(m1,i,k) * matrix_get(m2, k,j));
+					new = new + matrix_get(m1,i,k) * matrix_get(m2, k,j); //computes the dot product of the row i and column j
 				}
+				matrix_set(&output, i , j, new);
 			}
 		}
 
@@ -201,7 +204,7 @@ Matrix matrix_read(char *filename, char *name){
  	fscanf(fp, "%d", &rows);
  	fscanf(fp, "%d", &columns);
 
- 	Matrix read_matrix = matrix_constuctor(rows, columns, name);
+ 	Matrix read_matrix = matrix_constructor(rows, columns, name);
 
  	double entry;
  	int i, j;
